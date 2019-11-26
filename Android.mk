@@ -21,4 +21,3 @@ ifneq ($(filter sc03e i9300 i9305 n7100 n8000 n8013 n8020 t0lte t0lteatt t0ltetm
 include $(call all-makefiles-under,$(LOCAL_PATH))
 
 endif
-

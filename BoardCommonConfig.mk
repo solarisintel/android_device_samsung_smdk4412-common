@@ -14,7 +14,10 @@
 # limitations under the License.
 #
 
+TARGET_SPECIFIC_HEADER_PATH += device/samsung/smdk4412-common/include
+
 # This variable is set first, so it can be overridden
+
 # by BoardConfigVendor.mk
 USE_CAMERA_STUB := false
 BOARD_USES_GENERIC_AUDIO := false
@@ -31,13 +34,9 @@ TARGET_CPU_VARIANT := cortex-a9
 ARCH_ARM_HAVE_NEON := true
 ARCH_ARM_HAVE_TLS_REGISTER := true
 
-EXYNOS4X12_ENHANCEMENTS := true
-EXYNOS4_ENHANCEMENTS := true
+#TARGET_USES_GRALLOC1 := true
 
-ifdef EXYNOS4X12_ENHANCEMENTS
-BOARD_GLOBAL_CFLAGS += -DEXYNOS4_ENHANCEMENTS
-BOARD_GLOBAL_CFLAGS += -DEXYNOS4X12_ENHANCEMENTS
-endif
+TARGET_USES_64_BIT_BINDER := true
 
 BOARD_VENDOR := samsung
 TARGET_BOARD_PLATFORM := exynos4
@@ -50,35 +49,43 @@ TARGET_NO_RADIOIMAGE := true
 TARGET_PROVIDES_INIT := true
 TARGET_PROVIDES_INIT_TARGET_RC := true
 
+# Vendor init
+TARGET_RECOVERY_DEVICE_MODULES := libinit_smdk4412-common
+
 # Kernel
-BOARD_KERNEL_CMDLINE := console=ttySAC2,115200
+BOARD_KERNEL_CMDLINE := console=null androidboot.selinux=permissive 
+BOARD_KERNEL_IMAGE_NAME := zImage
 BOARD_KERNEL_BASE := 0x40000000
 BOARD_KERNEL_PAGESIZE := 2048
 KERNEL_TOOLCHAIN := $(ANDROID_BUILD_TOP)/prebuilts/gcc/$(HOST_OS)-x86/arm/arm-eabi-4.8/bin
 TARGET_KERNEL_CROSS_COMPILE_PREFIX := arm-eabi-
+LZMA_RAMDISK_TARGETS := recovery
+
+TARGET_NEEDS_PLATFORM_TEXT_RELOCATIONS := true
+WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY := true
 
 # Filesystem
 BOARD_NAND_PAGE_SIZE := 4096
 BOARD_NAND_SPARE_SIZE := 128
 BOARD_BOOTIMAGE_PARTITION_SIZE := 8388608
-BOARD_RECOVERYIMAGE_PARTITION_SIZE := 8388608
+#BOARD_RECOVERYIMAGE_PARTITION_SIZE := 8388608
+BOARD_RECOVERYIMAGE_PARTITION_SIZE := 9000000
 BOARD_SYSTEMIMAGE_PARTITION_SIZE := 1610612736
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 12381585408
 BOARD_FLASH_BLOCK_SIZE := 4096
 TARGET_USERIMAGES_USE_EXT4 := true
 
 # Hardware tunables
-BOARD_HARDWARE_CLASS := hardware/samsung/cmhw \
-    device/samsung/smdk4412-common/cmhw
+BOARD_HARDWARE_CLASS := hardware/samsung/lineagehw \
+    device/samsung/smdk4412-common/lineagehw
 
 # Graphics
-BOARD_EGL_NEEDS_HANDLE_VALUE := true
 USE_OPENGL_RENDERER := true
 BOARD_USES_SKIAHWJPEG := true
-BOARD_EGL_WORKAROUND_BUG_10194508 := true
+TARGET_PROVIDES_LIBEGL_MALI := true
+TARGET_NEEDS_NATIVE_WINDOW_FORMAT_FIX := true
 # Only needed by Samsung skia changes (not ported beyond 4.4)
 #BOARD_GLOBAL_CFLAGS += -DSEC_HWJPEG_G2D
-BOARD_GLOBAL_CFLAGS += -DFORCE_SCREENSHOT_CPU_PATH
 
 # FIMG Acceleration
 BOARD_USES_FIMGAPI := true
@@ -94,9 +101,9 @@ BOARD_USE_SYSFS_VSYNC_NOTIFICATION := true
 # Camera
 BOARD_CAMERA_HAVE_ISO := true
 BOARD_CAMERA_MSG_MGMT := true
+#TARGET_HAS_LEGACY_CAMERA_HAL1 := true
 
 # OMX
-BOARD_USE_SAMSUNG_COLORFORMAT := true
 BOARD_NONBLOCK_MODE_PROCESS := true
 BOARD_USE_STOREMETADATA := true
 BOARD_USE_METADATABUFFERTYPE := true
@@ -108,14 +115,9 @@ BOARD_USE_CSC_FIMC := false
 EXTENDED_FONT_FOOTPRINT := true
 
 # Logging
-TARGET_USES_LOGD := false
+TARGET_USES_LOGD := true
 
 BOARD_USES_LEGACY_MMAP := true
-
-# RIL
-BOARD_MOBILEDATA_INTERFACE_NAME := "pdp0"
-
-TARGET_SPECIFIC_HEADER_PATH += device/samsung/smdk4412-common/include
 
 # Wifi
 BOARD_WLAN_DEVICE                := bcmdhd
@@ -160,19 +162,29 @@ endif
 BOARD_SEPOLICY_DIRS += device/samsung/smdk4412-common/selinux
 
 # Charging mode
-BOARD_CHARGING_MODE_BOOTING_LPM := /sys/class/power_supply/battery/batt_lp_charging
 BOARD_BATTERY_DEVICE_NAME := "battery"
 BOARD_CHARGER_ENABLE_SUSPEND := true
+WITH_LINEAGE_CHARGER := false
 RED_LED_PATH := /sys/class/leds/led_r/brightness
 GREEN_LED_PATH := /sys/class/leds/led_g/brightness
 BLUE_LED_PATH := /sys/class/leds/led_b/brightness
 BACKLIGHT_PATH := /sys/class/backlight/panel/brightness
+
+# is working ?!
+SELINUX_IGNORE_NEVERALLOWS := true
 
 # Override healthd HAL
 BOARD_HAL_STATIC_LIBRARIES := libhealthd.exynos4
 
 # LPM Battery Percentage
 BOARD_CHARGER_SHOW_PERCENTAGE := true
+
+## Use release-keys to sign the build
+#BUILD_KEYS := release-keys
+
+ifeq ($(BUILD_KEYS),release-keys)
+PRODUCT_DEFAULT_DEV_CERTIFICATE := /home/$(USER)/.android-certs/releasekey
+endif
 
 # inherit from the proprietary version
 -include vendor/samsung/smdk4412-common/BoardConfigVendor.mk
