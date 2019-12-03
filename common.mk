@@ -60,7 +60,6 @@ PRODUCT_COPY_FILES += \
 
 # Legacy GPS
 PRODUCT_PACKAGES += \
-    android.hardware.gnss@1.0-impl \
     gps.smdk4x12
 
 # Wifi
@@ -192,6 +191,15 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     charger_res_images
 
+# drm 
+PRODUCT_PACKAGES += \
+    android.hardware.drm@1.0-impl \
+    android.hardware.drm@1.0-service
+
+# DRM
+PRODUCT_PROPERTY_OVERRIDES += \
+    drm.service.enabled=true
+
 # These are the hardware-specific features
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.bluetooth_le.xml:system/etc/permissions/android.hardware.bluetooth_le.xml \
@@ -228,6 +236,9 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/prebuilt/updater:updater
 
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.sys.recovery_update=false
+
 # Stylus gestures
 PRODUCT_PACKAGES += \
     org.lineageos.keyhandler
@@ -260,3 +271,4 @@ $(call inherit-product, $(LOCAL_PATH)/go_galaxys2-common.mk)
 
 # Include debugging props
 $(call inherit-product, device/samsung/smdk4412-common/system_prop_debug.mk)
+
