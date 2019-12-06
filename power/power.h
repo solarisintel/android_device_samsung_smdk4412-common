@@ -23,6 +23,10 @@
 
 #define MS_TO_NS (1000000L)
 
+// Custom Lineage hints
+const static power_hint_t POWER_HINT_CPU_BOOST   = (power_hint_t)0x00000110;
+const static power_hint_t POWER_HINT_SET_PROFILE = (power_hint_t)0x00000111;
+
 enum {
     PROFILE_POWER_SAVE = 0,
     PROFILE_BALANCED,
@@ -149,7 +153,7 @@ static power_profile profiles[PROFILE_MAX] = {
         .suspend_sampling_up_factor = 6,
         .suspend_max_freq = 800000,
 
-        .boost_freq = 400000,
+        .boost_freq = 800000,
         .boost_mincpus = 0,
         .interaction_boost_time = 120 * (MS_TO_NS),
         .launch_boost_time = 2000 * (MS_TO_NS),
