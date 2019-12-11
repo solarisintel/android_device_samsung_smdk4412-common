@@ -114,10 +114,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     libsecril-shim
 
-# SamsungPowerHAL
-PRODUCT_PACKAGES += \
-    android.hardware.power@1.0-service.exynos4
-
 # Usb
 PRODUCT_PACKAGES += \
     android.hardware.usb@1.0-impl \
