@@ -54,6 +54,10 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     gps.smdk4x12
 
+# GPS
+#PRODUCT_COPY_FILES += \
+#    $(COMMON_PATH)/configs/gps.conf:system/etc/gps.conf
+
 # Wifi
 PRODUCT_COPY_FILES += \
     $(COMMON_PATH)/configs/wpa_supplicant_overlay.conf:system/etc/wifi/wpa_supplicant_overlay.conf \
@@ -63,9 +67,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     wifi.interface=wlan0 \
     wifi.supplicant_scan_interval=15
 
-# GPS
-#PRODUCT_COPY_FILES += \
-#    $(COMMON_PATH)/configs/gps.conf:system/etc/gps.conf
 
 # Packages
 PRODUCT_PACKAGES += \
@@ -113,6 +114,14 @@ PRODUCT_PACKAGES += \
 # Legacy RIL
 PRODUCT_PACKAGES += \
     libsecril-shim
+
+# Legacy Power
+#PRODUCT_PACKAGES += \
+#    power.smdk4x12
+
+PRODUCT_PACKAGES += \
+    android.hardware.power@1.0-impl \
+    android.hardware.power@1.0-service
 
 # Usb
 PRODUCT_PACKAGES += \
@@ -227,6 +236,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.sys.recovery_update=false
 
+
 # Graphics
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.zygote.disable_gl_preload=1 \
@@ -236,15 +246,17 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 PRODUCT_TAGS += dalvik.gc.type-precise
 
-$(call inherit-product, frameworks/native/build/phone-xhdpi-1024-dalvik-heap.mk)
+$(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
 
 # Include exynos4 platform specific parts
 TARGET_HAL_PATH := hardware/samsung/exynos4/hal
 TARGET_OMX_PATH := hardware/samsung/exynos/multimedia/openmax
+
 $(call inherit-product, hardware/samsung/exynos4x12.mk)
 
 # Include non-opensource parts
 $(call inherit-product, vendor/samsung/smdk4412-common/smdk4412-common-vendor.mk)
+
 # Art
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     dalvik.vm.dex2oat-threads=1 \
