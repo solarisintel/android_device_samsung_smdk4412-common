@@ -36,7 +36,8 @@ ARCH_ARM_HAVE_TLS_REGISTER := true
 
 #TARGET_USES_GRALLOC1 := true
 
-TARGET_USES_64_BIT_BINDER := true
+# kernel 3.0.101 is 32bit binder only 
+#TARGET_USES_64_BIT_BINDER := true
 
 BOARD_VENDOR := samsung
 TARGET_BOARD_PLATFORM := exynos4
