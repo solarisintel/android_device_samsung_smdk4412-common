@@ -176,8 +176,8 @@ SELINUX_IGNORE_NEVERALLOWS := true
 # Override healthd HAL
 BOARD_HAL_STATIC_LIBRARIES := libhealthd.exynos4
 
-# LPM Battery Percentage
-BOARD_CHARGER_SHOW_PERCENTAGE := true
+# LPM Battery Percentage (sc03e not support)
+BOARD_CHARGER_SHOW_PERCENTAGE := false
 
 ## Use release-keys to sign the build
 #BUILD_KEYS := release-keys
