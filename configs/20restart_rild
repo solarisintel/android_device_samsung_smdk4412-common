@@ -1,0 +1,5 @@
+#!/system/bin/sh
+
+# for RIL service 
+sleep 20 && stop ril-daemon && sleep 5 && start ril-daemon &
+ 
