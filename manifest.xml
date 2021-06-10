@@ -53,7 +53,6 @@
             <instance>default</instance>
         </interface>
     </hal>
-<!--
     <hal format="hidl">
         <name>android.hardware.gnss</name>
         <transport>hwbinder</transport>
@@ -63,7 +62,6 @@
             <instance>default</instance>
         </interface>
     </hal>
--->
     <hal format="hidl">
         <name>android.hardware.graphics.allocator</name>
         <transport arch="32">passthrough</transport>

@@ -65,10 +65,16 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_COPY_FILES += \
     $(COMMON_PATH)/configs/gps.conf:system/etc/gps.conf
 
-# GPS
+# GPS 
+#PRODUCT_PACKAGES += \
+#    android.hardware.gnss@1.0-impl \
+#    android.hardware.gnss@1.0-service
+
+# GPS legacy
 PRODUCT_PACKAGES += \
-    android.hardware.gnss@1.0-impl \
-    android.hardware.gnss@1.0-service
+    android.hardware.gnss@1.0-impl.legacy \
+    android.hardware.gnss@1.0-service.legacy
+
 
 # Packages
 PRODUCT_PACKAGES += \
