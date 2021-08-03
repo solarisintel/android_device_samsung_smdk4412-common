@@ -1,3 +1,4 @@
+#pragma clang diagnostic ignored "-Wwritable-strings"
 /*
  * Copyright (C) 2012 The Android Open Source Project
  * Copyright (C) 2014 The CyanogenMod Project
@@ -17,8 +18,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#pragma clang diagnostic ignored "-Wwritable-strings"
-
 #define LOG_TAG "PegasusPowerHAL"
 
 #include <hardware/hardware.h>
@@ -396,6 +395,11 @@ void power_hint(power_hint_t hint, void *data) {
         default:
             break;
     }
+}
+
+int get_number_of_profiles()
+{
+    return PROFILE_MAX;
 }
 
 } // extern "C"
