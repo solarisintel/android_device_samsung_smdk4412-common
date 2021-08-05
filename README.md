@@ -1,10 +1,10 @@
-# Initialize local repository
+## Initialize local repository
 $ repo init -u git://github.com/LineageOS/android.git -b lineage-16.0
 
-# Sync
+## Sync
 $ repo sync -j16 --current-branch --no-tags --force-sync
 
-# Replace system files
+## Replace system files
   
 bionic  
 $ git clone -b lineage-16.0 --single-branch https://github.com/CustomROMs/android_bionic.git --depth 1  
@@ -31,11 +31,11 @@ $ git clone -b lineage-16.0 --single-branch https://github.com/CustomROMs/androi
 $ rm -rf hardware/samsung  
 $ mv android_hardware_samsung hardware/samsung 
 
-# gnss interface modules do not refer device/xxx/include/hardware
+## gnss interface modules do not refer device/xxx/include/hardware
 $ cp device/samsung/sc03e/include/hardware/gps.h   hardware/libhardware/include/hardware
 
-# Set up environment
+## Set up environment
 $ source build/envsetup.sh
 
-# Choose a target, build
+## Choose a target, build
 $ blunch sc03e
