@@ -25,7 +25,12 @@ frameworks/opt/telephony
 $ git clone -b lineage-16.0 --single-branch https://github.com/CustomROMs/android_frameworks_opt_telephony.git --depth 1  
 $ rm -rf frameworks/opt/telephony  
 $ mv android_frameworks_opt_telephony frameworks/opt/telephony  
-  
+
+hardware/samsung   
+$ git clone -b lineage-16.0 --single-branch https://github.com/CustomROMs/android_hardware_samsung.git --depth 1  
+$ rm -rf hardware/samsung  
+$ mv android_hardware_samsung hardware/samsung 
+
 # gnss interface modules do not refer device/xxx/include/hardware
 $ cp device/samsung/sc03e/include/hardware/gps.h   hardware/libhardware/include/hardware
 
