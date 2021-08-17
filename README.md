@@ -38,4 +38,4 @@ $ cp device/samsung/sc03e/include/hardware/gps.h   hardware/libhardware/include/
 $ source build/envsetup.sh
 
 ## Choose a target, build
-$ blunch sc03e
+$ brunch sc03e
