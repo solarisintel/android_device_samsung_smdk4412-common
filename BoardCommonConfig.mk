@@ -14,11 +14,17 @@
 # limitations under the License.
 #
 
+DEVICE_PATH := device/samsung/smdk4412-common
+
+# Allow duplicate rules to override them
+BUILD_BROKEN_DUP_RULES := true
+BUILD_BROKEN_PHONY_TARGETS := true
+
 # This variable is set first, so it can be overridden
 # by BoardConfigVendor.mk
-
 USE_CAMERA_STUB := false
 BOARD_USES_GENERIC_AUDIO := false
+USE_XML_AUDIO_POLICY_CONF := 1
 
 TARGET_BOOTANIMATION_PRELOAD := true
 
@@ -46,38 +52,44 @@ TARGET_PROVIDES_INIT := true
 TARGET_PROVIDES_INIT_TARGET_RC := true
 
 # Kernel
-BOARD_KERNEL_CMDLINE := console=ttySAC2,115200 androidboot.selinux=permissive
+BOARD_KERNEL_CMDLINE := console=ttySAC2,115200
 BOARD_KERNEL_IMAGE_NAME := zImage
 BOARD_KERNEL_BASE := 0x40000000
 BOARD_KERNEL_PAGESIZE := 2048
-#KERNEL_TOOLCHAIN := prebuilts/gcc/$(HOST_OS)-x86/arm/arm-eabi-4.8/bin
-#TARGET_KERNEL_CROSS_COMPILE_PREFIX := arm-eabi-
+
 LZMA_RAMDISK_TARGETS := recovery
 
 TARGET_PROCESS_SDK_VERSION_OVERRIDE += \
+    /system/vendor/lib/libsec-ril.so=19 \
+    /system/vendor/lib/libsecril-client.so=19 \
     /system/vendor/bin/hw/rild=19
 
-TARGET_LD_SHIM_LIBS := \
-    /system/lib/libsuspend.so|libsuspend-shim.so \
-    /system/lib/libandroid_servers.so|libsuspend-shim.so
+TARGET_PROCESS_SDK_VERSION_OVERRIDE := \
+    /system/lib/libsecnativefeature.so=22 \
+    /system/lib/libomission_avoidance.so=22 \
+    /system/lib/libfactoryutil.so=22 \
+    /system/vendor/lib/libakm.so=22
 
-# installer have dexopt apks
 WITH_DEXPREOPT := true
-WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY := true
+WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY := false
 
 # Filesystem
+TARGET_FS_CONFIG_GEN := device/samsung/smdk4412-common/config.fs
 #BOARD_NAND_PAGE_SIZE := 4096
 #BOARD_NAND_SPARE_SIZE := 128
 BOARD_BOOTIMAGE_PARTITION_SIZE := 8388608
-BOARD_RECOVERYIMAGE_PARTITION_SIZE := 18388608
+BOARD_RECOVERYIMAGE_PARTITION_SIZE := 16777216
 BOARD_SYSTEMIMAGE_PARTITION_SIZE := 1610612736
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 12381585408
 BOARD_FLASH_BLOCK_SIZE := 4096
+# must add tomstones
+BOARD_ROOT_EXTRA_FOLDERS := efs misc preload firmware tombstones
+BOARD_ROOT_EXTRA_SYMLINKS := /data/tombstones:/tombstones
 TARGET_USERIMAGES_USE_EXT4 := true
 
 # Hardware tunables
-BOARD_HARDWARE_CLASS := hardware/samsung/samsunghw \
-    device/samsung/smdk4412-common/samsunghw
+BOARD_HARDWARE_CLASS := hardware/samsung/lineagehw \
+    device/samsung/smdk4412-common/lineagehw
 
 # Graphics
 USE_OPENGL_RENDERER := true
@@ -101,7 +113,11 @@ BOARD_USE_SYSFS_VSYNC_NOTIFICATION := true
 # Camera
 BOARD_CAMERA_HAVE_ISO := true
 BOARD_CAMERA_MSG_MGMT := true
-#TARGET_HAS_LEGACY_CAMERA_HAL1 := true
+TARGET_HAS_LEGACY_CAMERA_HAL1 := true
+TARGET_NEED_DISABLE_FACE_DETECTION := true
+TARGET_NEED_DISABLE_FACE_DETECTION_BOTH_CAMERAS := true
+TARGET_PROVIDES_CAMERA_HAL := true
+USE_DEVICE_SPECIFIC_CAMERA := true
 
 # OMX
 BOARD_NONBLOCK_MODE_PROCESS := true
@@ -117,15 +133,12 @@ EXTENDED_FONT_FOOTPRINT := true
 # Logging
 TARGET_USES_LOGD := false
 
-# for 7.1, 8.1-9.0 is deleted (/bionic/libc/)
-BOARD_USES_LEGACY_MMAP := true
+# RIL for i9300
+#BOARD_MOBILEDATA_INTERFACE_NAME := "pdp0"
+#BOARD_MODEM_TYPE := xmm6262
+#OBBOARD_PROVIDES_LIBRIL := true
 
-# RIL
-BOARD_MOBILEDATA_INTERFACE_NAME := "pdp0,gprs,ppp0,rmnet0,rmnet1"
-BOARD_PROVIDES_LIBRIL := true
-BOARD_MODEM_TYPE := mdm9x35
 TARGET_SPECIFIC_HEADER_PATH += device/samsung/smdk4412-common/include
-BOARD_RIL_CLASS := ../../../device/samsung/sc03e/ril
 
 # Wifi
 BOARD_WLAN_DEVICE                := bcmdhd
@@ -176,31 +189,25 @@ BOARD_SEPOLICY_DIRS += device/samsung/smdk4412-common/selinux
 BOARD_BATTERY_DEVICE_NAME := "battery"
 BOARD_CHARGER_ENABLE_SUSPEND := true
 WITH_LINEAGE_CHARGER := false
-#RED_LED_PATH := /sys/class/leds/red/brightness
-#GREEN_LED_PATH := /sys/class/leds/green/brightness
-#BLUE_LED_PATH := /sys/class/leds/blue/brightness
+RED_LED_PATH := /sys/class/leds/led_r/brightness
+GREEN_LED_PATH := /sys/class/leds/led_g/brightness
+BLUE_LED_PATH := /sys/class/leds/led_b/brightness
 BACKLIGHT_PATH := /sys/class/backlight/panel/brightness
 
 SELINUX_IGNORE_NEVERALLOWS := true
 
-# Override healthd HAL
-BOARD_HAL_STATIC_LIBRARIES := libhealthd.exynos4
-
 # LPM Battery Percentage
 BOARD_CHARGER_SHOW_PERCENTAGE := true
-
-## Use release-keys to sign the build
-#BUILD_KEYS := release-keys
-#
-#ifeq ($(BUILD_KEYS),release-keys)
-#PRODUCT_DEFAULT_DEV_CERTIFICATE := .android-certs/releasekey
-#endif
 
 # inherit from the proprietary version
 -include vendor/samsung/smdk4412-common/BoardConfigVendor.mk
 
-# HIDL
+DEXPREOPT_GENERATE_APEX_IMAGE := false
+DEXPREOPT_USE_APEX_IMAGE := false
+
+# Manifests
 DEVICE_MANIFEST_FILE := device/samsung/smdk4412-common/manifest.xml
 
-# Memory management
-MALLOC_SVELTE := true
+
+
+

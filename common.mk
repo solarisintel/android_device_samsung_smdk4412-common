@@ -28,58 +28,74 @@ PRODUCT_COPY_FILES := \
     $(COMMON_PATH)/rootdir/ueventd.smdk4x12.rc:root/ueventd.smdk4x12.rc \
     $(COMMON_PATH)/rootdir/ueventd.smdk4x12.rc:recovery/root/ueventd.smdk4x12.rc
 
+# init.d
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/tweaks.rc:system/vendor/etc/init/tweaks.rc
+
 # Audio
 PRODUCT_COPY_FILES += \
     $(COMMON_PATH)/configs/audio_effects.conf:system/etc/audio_effects.conf \
-    $(COMMON_PATH)/configs/audio_policy.conf:system/etc/audio_policy.conf \
-    $(COMMON_PATH)/audio/silence.wav:system/etc/sound/silence.wav
+    $(COMMON_PATH)/audio/silence.wav:system/etc/sound/silence.wav \
+    $(COMMON_PATH)/configs/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml \
+    $(COMMON_PATH)/configs/a2dp_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/a2dp_audio_policy_configuration.xml \
+    $(COMMON_PATH)/configs/usb_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/usb_audio_policy_configuration.xml
+
+PRODUCT_COPY_FILES += \
+    frameworks/av/services/audiopolicy/config/audio_policy_volumes.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_volumes.xml \
+    frameworks/av/services/audiopolicy/config/default_volume_tables.xml:$(TARGET_COPY_OUT_VENDOR)/etc/default_volume_tables.xml
 
 # HIDL
-PRODUCT_COPY_FILES += \
-    $(COMMON_PATH)/manifest.xml:system/vendor/manifest.xml
+#PRODUCT_COPY_FILES += \
+#    $(COMMON_PATH)/manifest.xml:system/vendor/manifest.xml
 
 # Camera FW
 PRODUCT_COPY_FILES += \
     $(COMMON_PATH)/configs/80cfw:system/etc/init.d/80cfw
 
-# SIM detection fix
-#PRODUCT_COPY_FILES += \
-#    $(COMMON_PATH)/configs/20restart_rild:system/etc/init.d/20restart_rild
+# Wifi
+PRODUCT_COPY_FILES += \
+    $(COMMON_PATH)/configs/wpa_supplicant_overlay.conf:system/vendor/etc/wifi/wpa_supplicant_overlay.conf \
+    $(COMMON_PATH)/configs/p2p_supplicant_overlay.conf:system/vendor/etc/wifi/p2p_supplicant_overlay.conf
 
-# RIL subscription workaround for 9.0
+PRODUCT_PROPERTY_OVERRIDES += \
+    wifi.interface=wlan0 \
+    wifi.supplicant_scan_interval=30 \
+    net.tethering.noprovisioning=true
+
+# RIL subscription workaround
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/restart_rild.sh:system/vendor/bin/restart_rild.sh \
     $(LOCAL_PATH)/configs/rild_restart.rc:system/vendor/etc/init/rild_restart.rc
 
-# Wifi
-PRODUCT_COPY_FILES += \
-    $(COMMON_PATH)/configs/wpa_supplicant_overlay.conf:system/etc/wifi/wpa_supplicant_overlay.conf \
-    $(COMMON_PATH)/configs/p2p_supplicant_overlay.conf:system/etc/wifi/p2p_supplicant_overlay.conf
-
-PRODUCT_PROPERTY_OVERRIDES += \
-    wifi.interface=wlan0 \
-    wifi.supplicant_scan_interval=180 \
-    net.tethering.noprovisioning=true
-
 # Gps
 PRODUCT_COPY_FILES += \
-    $(COMMON_PATH)/configs/gps.conf:system/etc/gps.conf
+    $(COMMON_PATH)/configs/gps.conf:system/etc/gps.conf \
+    $(COMMON_PATH)/configs/gps_debug.conf:$(TARGET_COPY_OUT_SYSTEM)/etc/gps_debug.conf
 
-# GPS 
-#PRODUCT_PACKAGES += \
-#    android.hardware.gnss@1.0-impl \
-#    android.hardware.gnss@1.0-service
-
-# GPS legacy
+# USB
 PRODUCT_PACKAGES += \
-    android.hardware.gnss@1.0-impl.legacy \
-    android.hardware.gnss@1.0-service.legacy
+    android.hardware.usb@1.0-service.basic
 
+# Use legacy ADB USB support
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.adb.nonblocking_ffs=false
+
+# Trust HAL
+PRODUCT_PACKAGES += \
+    vendor.lineage.trust@1.0-service
+
+# SamsungPowerHAL
+PRODUCT_PACKAGES += \
+    android.hardware.power@1.0-service.exynos4
+
+# Battery
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.config.small_battery=true
 
 # Packages
 PRODUCT_PACKAGES += \
-    android.hardware.light@2.0-impl \
-    android.hardware.light@2.0-service \
+    AdvancedDisplay \
+    android.hardware.light@2.0-service.samsung \
     vendor.lineage.livedisplay@2.0-service.samsung-exynos \
     android.hardware.graphics.allocator@2.0-impl-exynos4 \
     android.hardware.graphics.mapper@2.0-impl-exynos4 \
@@ -99,52 +115,54 @@ PRODUCT_PACKAGES += \
     gralloc.exynos4 \
     libMali \
     libEGL_mali \
-    gCam \
-    android.hardware.camera.provider@2.4-impl-legacy \
-    camera.device@1.0-impl-legacy \
     android.hardware.sensors@1.0-impl \
-    android.hardware.gnss@1.0-impl \
     libfimc \
     libfimg \
     libhwconverter \
     libhwjpeg \
     libnetcmdiface \
     libsecion \
-    libstlport \
     libsync \
     libUMP \
-    lights.smdk4x12 \
     macloader \
     tinymix \
     libstagefright-shim \
     libsuspend-shim \
     libC
 
+# Camera
+PRODUCT_PACKAGES += \
+    android.hardware.camera.provider@2.4-impl-legacy \
+    camera.device@1.0-impl-legacy \
+    camera.smdk4x12 \
+    gCam
+
+
+# GPS
+#PRODUCT_PACKAGES += \
+#   android.hardware.gnss@1.0-impl \
+#   android.hardware.gnss@1.0-service.exynos4
+
+# GPS
+PRODUCT_PACKAGES += \
+    android.hardware.gnss@1.0-impl.legacy \
+    android.hardware.gnss@1.0-service.legacy
+
+# GPS
+#PRODUCT_PACKAGES += \
+#    android.hardware.gnss@1.0-impl.legacy
+
 # USB
 PRODUCT_PACKAGES += \
     android.hardware.usb@1.0-service.basic
 
-# dont use for speed priority 
-# SamsungPowerHAL
-PRODUCT_PACKAGES += \
-    android.hardware.power@1.0-service.exynos4
-
-# SamsungServiceMode (not used)
-#PRODUCT_PACKAGES += \
-#    SamsungServiceMode
-    
 # Usb
 PRODUCT_PACKAGES += \
-    android.hardware.usb@1.0-impl \
-    android.hardware.usb@1.0-service
+	android.hardware.usb@1.0-impl \
+	android.hardware.usb@1.0-service
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/mediaserver.rc:system/etc/init/mediaserver.rc
-
-# Charger
-PRODUCT_PACKAGES += \
-    charger_exynos4 \
-    charger_res_images
 
 # MFC API
 PRODUCT_PACKAGES += \
@@ -163,12 +181,30 @@ PRODUCT_PACKAGES += \
     libOMX.SEC.M4V.Encoder
 #   libOMX.SEC.VP8.Decoder
 
+# DRM
+PRODUCT_PACKAGES += \
+    android.hardware.drm@1.0-impl \
+    android.hardware.drm@1.0-service
+
+PRODUCT_PROPERTY_OVERRIDES += \
+    debug.stagefright.ccodec=0 \
+    media.stagefright.legacyencoder=true \
+    media.stagefright.less-secure=true
+
 PRODUCT_COPY_FILES += \
     $(COMMON_PATH)/configs/media_profiles.xml:system/etc/media_profiles.xml \
     $(COMMON_PATH)/configs/media_codecs.xml:system/etc/media_codecs.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:system/etc/media_codecs_google_telephony.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_video_le.xml:system/etc/media_codecs_google_video_le.xml
+
+# Memory Optimizations
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.vendor.qti.am.reschedule_service=true \
+    ro.vendor.qti.sys.fw.use_trim_settings=true \
+    ro.vendor.qti.sys.fw.trim_empty_percent=50 \
+    ro.vendor.qti.sys.fw.trim_cache_percent=100 \
+    ro.vendor.qti.sys.fw.empty_app_percent=25
 
 # Filesystem management tools
 PRODUCT_PACKAGES += \
@@ -190,7 +226,7 @@ PRODUCT_PACKAGES += \
 
 # Wifi
 PRODUCT_PACKAGES += \
-    android.hardware.wifi@1.0-service \
+    android.hardware.wifi@1.0-service.legacy \
     android.hardware.wifi.supplicant@1.0 \
     wificond \
     libwpa_client \
@@ -235,7 +271,7 @@ PRODUCT_COPY_FILES += \
 
 # Stylus gestures
 PRODUCT_PACKAGES += \
-    com.android.keyhandler
+    org.lineageos.keyhandler
 
 # Graphics
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -249,8 +285,14 @@ TARGET_HAL_PATH := hardware/samsung/exynos4/hal
 TARGET_OMX_PATH := hardware/samsung/exynos/multimedia/openmax
 $(call inherit-product, hardware/samsung/exynos4x12.mk)
 
+# Shipping API level
+$(call inherit-product, $(SRC_TARGET_DIR)/product/product_launched_with_k.mk)
+
 # Include non-opensource parts
 $(call inherit-product, vendor/samsung/smdk4412-common/smdk4412-common-vendor.mk)
+
+# Include Lineage sepolicy for Exynos
+$(call inherit-product, device/lineage/sepolicy/exynos/sepolicy.mk)
 
 # Art
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
@@ -258,16 +300,11 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     dalvik.vm.image-dex2oat-threads=1
 
 # Build with specific settings for Galaxys2-common
-#$(call inherit-product, $(LOCAL_PATH)/go_galaxys2-common.mk)
+$(call inherit-product, $(LOCAL_PATH)/go_galaxys2-common.mk)
 
-PRODUCT_PROPERTY_OVERRIDES += dalvik.vm.heapsize=360m
 
 # Apply Dalvik config for 2G phone
 $(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
 
 # Include debugging props
 $(call inherit-product, device/samsung/smdk4412-common/system_prop_debug.mk)
-
-# Trust
-PRODUCT_PACKAGES += \
-    vendor.lineage.trust@1.0-service
