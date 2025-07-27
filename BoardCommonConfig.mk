@@ -82,9 +82,9 @@ BOARD_RECOVERYIMAGE_PARTITION_SIZE := 16777216
 BOARD_SYSTEMIMAGE_PARTITION_SIZE := 1610612736
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 12381585408
 BOARD_FLASH_BLOCK_SIZE := 4096
-# must add tomstones
+
+# firmware, tombstone mounted from fstab
 BOARD_ROOT_EXTRA_FOLDERS := efs misc preload firmware tombstones
-BOARD_ROOT_EXTRA_SYMLINKS := /data/tombstones:/tombstones
 TARGET_USERIMAGES_USE_EXT4 := true
 
 # Hardware tunables
