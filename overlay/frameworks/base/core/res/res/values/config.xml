@@ -23,23 +23,6 @@
     <!-- Enables or disables fading edges when marquee is enabled in TextView. -->
     <bool name="config_ui_enableFadingMarquee">false</bool>
 
-    <!-- List of regexpressions describing the interface (if any) that represent tetherable
-         Wifi interfaces.  If the device doesn't want to support tethering over Wifi this
-         should be empty.  An example would be "softap.*" -->
-    <string-array translatable="false" name="config_tether_wifi_regexs">
-        <item>"wlan0"</item>
-    </string-array>
-
-    <!-- List of regexpressions describing the interface (if any) that represent tetherable
-         bluetooth interfaces.  If the device doesn't want to support tethering over bluetooth this
-         should be empty. -->
-    <string-array translatable="false" name="config_tether_bluetooth_regexs">
-        <item>"bt-pan"</item>
-    </string-array>
-
-    <!-- Boolean indicating whether the wifi chipset has dual frequency band support -->
-    <bool translatable="false" name="config_wifi_dual_band_support">true</bool>
-
     <!-- Flag indicating whether we should enable the automatic brightness in Settings.
          config_hardware_automatic_brightness_available is not set, so we will use software implementation -->
     <bool name="config_automatic_brightness_available">true</bool>
@@ -196,20 +179,9 @@
 
     <!-- Default list of files pinned by the Pinner Service -->
     <string-array translatable="false" name="config_defaultPinnerServiceFiles">
-        <!-- boot -->
-        <item>"/system/framework/boot.vdex"</item>            <!-- 4.158.376 -->
-        <item>"/system/framework/arm/boot.oat"</item>         <!-- 4.008.336 -->
-
-        <!-- boot-framework -->
-        <item>"/system/framework/boot-framework.vdex"</item>     <!-- 18.893.636 -->
-        <item>"/system/framework/arm/boot-framework.oat"</item>  <!-- 13.060.208 -->
-
-        <!-- services -->
-        <item>"/system/framework/oat/arm/services.odex"</item>   <!-- 20.733.436 -->
-        <item>"/system/framework/oat/arm/services.vdex"</item>   <!--  8.622.988 -->
-
-        <item>"/system/framework/arm/boot-core-libart.oat"</item><!--  1.638.728 -->
-        <item>"/system/framework/boot-core-libart.vdex"</item>   <!--  2.754.164 -->
+        <item>"/system/apex/com.android.art.release/javalib/arm/boot.oat"</item> <!-- 2.671.120 -->
+        <item>"/system/framework/arm/boot-framework.oat"</item>                  <!-- 9.654.856 -->
+        <item>"/system/framework/oat/arm/services.odex"</item>                   <!-- 12.726.856 -->
     </string-array>
 
     <!-- Keep chosen default camera app pinned in memory for faster launching -->
@@ -221,4 +193,21 @@
     <!-- Minimum screen brightness setting allowed by the power manager.
          The user is forbidden from setting the brightness below this level. -->
     <integer name="config_screenBrightnessSettingMinimum">30</integer>
+
+    <!-- The amount to scale fullscreen snapshots for Overview and snapshot starting windows. -->
+    <item name="config_highResTaskSnapshotScale" format="float" type="dimen">0.8</item>
+
+    <!-- The amount to scale reduced scale snapshots for Overview and snapshot starting windows.
+         Reduced scale snapshots are loaded before full screen snapshots to improve load times and
+         minimize the chance the user will see an empty task card. If set to 0, reduced scale
+         snapshots are disabled, and snapshots will only be stored at config_highResTaskSnapshotScale
+         -->
+    <item name="config_lowResTaskSnapshotScale" format="float" type="dimen">0.3</item>
+
+    <!-- Feature flag to store TaskSnapshot in 16 bit pixel format to save memory. -->
+    <bool name="config_use16BitTaskSnapshotPixelFormat">true</bool>
+
+    <!-- Disable WiFi Debugging -->
+    <bool translatable="false" name="config_wifi_enable_wifi_firmware_debugging">false</bool>
+    <integer translatable="false" name="config_wifi_logger_ring_buffer_verbose_size_limit_kb">64</integer>
 </resources>

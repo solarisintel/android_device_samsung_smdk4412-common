@@ -1,4 +1,3 @@
-#pragma clang diagnostic ignored "-Wimplicit-fallthrough"
 #include "secril-shim.h"
 #include "secril-sap.h"
 
@@ -44,8 +43,9 @@ static int gsmCid = -1;
 static bool onRequestSpoofUnsupportedRequest(int request, void *data, size_t datalen, RIL_Token t);
 static void onRequestDeviceIdentity(int request, RIL_Token t);
 
+static RIL_Dial dial;
+
 static void onRequestDial(int request, void *data, RIL_Token t) {
-	RIL_Dial dial;
 	RIL_UUS_Info uusInfo;
 
 	dial.address = ((RIL_Dial *) data)->address;
@@ -345,7 +345,7 @@ static bool onRequestGetRadioCapability(RIL_Token t)
 			RIL_RADIO_CAPABILITY_VERSION, /* version */
 			0, /* session */
 			RC_PHASE_CONFIGURED, /* phase */
-			RAF_GSM | RAF_GPRS | RAF_EDGE | RAF_HSUPA | RAF_HSDPA | RAF_HSPA | RAF_HSPAP | RAF_UMTS | RAF_LTE, /* rat */
+			RAF_GSM | RAF_GPRS | RAF_EDGE | RAF_HSUPA | RAF_HSDPA | RAF_HSPA | RAF_HSPAP | RAF_UMTS, /* rat */
 			{ /* logicalModemUuid */
 				0,
 			},

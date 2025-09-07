@@ -18,7 +18,6 @@ DEVICE_PATH := device/samsung/smdk4412-common
 
 # Allow duplicate rules to override them
 BUILD_BROKEN_DUP_RULES := true
-BUILD_BROKEN_PHONY_TARGETS := true
 
 # This variable is set first, so it can be overridden
 # by BoardConfigVendor.mk
@@ -51,40 +50,52 @@ TARGET_NO_RADIOIMAGE := true
 TARGET_PROVIDES_INIT := true
 TARGET_PROVIDES_INIT_TARGET_RC := true
 
+# Manifest
+DEVICE_MANIFEST_FILE := $(DEVICE_PATH)/manifest.xml
+PRODUCT_ENFORCE_VINTF_MANIFEST_OVERRIDE := true
+
 # Kernel
 BOARD_KERNEL_CMDLINE := console=ttySAC2,115200
 BOARD_KERNEL_IMAGE_NAME := zImage
 BOARD_KERNEL_BASE := 0x40000000
 BOARD_KERNEL_PAGESIZE := 2048
-
 LZMA_RAMDISK_TARGETS := recovery
 
 TARGET_PROCESS_SDK_VERSION_OVERRIDE += \
-    /system/vendor/lib/libsec-ril.so=19 \
-    /system/vendor/lib/libsecril-client.so=19 \
     /system/vendor/bin/hw/rild=19
 
 TARGET_PROCESS_SDK_VERSION_OVERRIDE := \
+    /vendor/bin/hw/rild=22 \
+    /system/vendor/lib/libsec-ril.so=22 \
     /system/lib/libsecnativefeature.so=22 \
     /system/lib/libomission_avoidance.so=22 \
     /system/lib/libfactoryutil.so=22 \
-    /system/vendor/lib/libakm.so=22
+    /system/vendor/lib/libakm.so=22 \
+    /system/vendor/lib/libsecril-client.so=22 \
+    /system/vendor/lib/hw/gps.exynos4.vendor.so=22 \
+    /system/vendor/bin/glgps=22
 
-WITH_DEXPREOPT := true
-WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY := false
+# Dexpreopt
+ifeq ($(HOST_OS),linux)
+  ifneq ($(TARGET_BUILD_VARIANT),eng)
+    WITH_DEXPREOPT_DEBUG_INFO := false
+    USE_DEX2OAT_DEBUG := false
+    DONT_DEXPREOPT_PREBUILTS := true
+    WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY := true
+  endif
+endif
 
 # Filesystem
 TARGET_FS_CONFIG_GEN := device/samsung/smdk4412-common/config.fs
 #BOARD_NAND_PAGE_SIZE := 4096
 #BOARD_NAND_SPARE_SIZE := 128
 BOARD_BOOTIMAGE_PARTITION_SIZE := 8388608
-BOARD_RECOVERYIMAGE_PARTITION_SIZE := 16777216
+#BOARD_RECOVERYIMAGE_PARTITION_SIZE := 8388608
 BOARD_SYSTEMIMAGE_PARTITION_SIZE := 1610612736
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 12381585408
 BOARD_FLASH_BLOCK_SIZE := 4096
-
-# firmware, tombstone mounted from fstab
-BOARD_ROOT_EXTRA_FOLDERS := efs misc preload firmware tombstones
+BOARD_ROOT_EXTRA_FOLDERS := efs misc preload
+#BOARD_ROOT_EXTRA_SYMLINKS := /data/tombstones:/tombstones
 TARGET_USERIMAGES_USE_EXT4 := true
 
 # Hardware tunables
@@ -113,11 +124,7 @@ BOARD_USE_SYSFS_VSYNC_NOTIFICATION := true
 # Camera
 BOARD_CAMERA_HAVE_ISO := true
 BOARD_CAMERA_MSG_MGMT := true
-TARGET_HAS_LEGACY_CAMERA_HAL1 := true
-TARGET_NEED_DISABLE_FACE_DETECTION := true
-TARGET_NEED_DISABLE_FACE_DETECTION_BOTH_CAMERAS := true
-TARGET_PROVIDES_CAMERA_HAL := true
-USE_DEVICE_SPECIFIC_CAMERA := true
+#TARGET_HAS_LEGACY_CAMERA_HAL1 := true
 
 # OMX
 BOARD_NONBLOCK_MODE_PROCESS := true
@@ -133,12 +140,13 @@ EXTENDED_FONT_FOOTPRINT := true
 # Logging
 TARGET_USES_LOGD := false
 
-# RIL for i9300
-#BOARD_MOBILEDATA_INTERFACE_NAME := "pdp0"
-#BOARD_MODEM_TYPE := xmm6262
-#OBBOARD_PROVIDES_LIBRIL := true
-
+# RIL
+BOARD_MOBILEDATA_INTERFACE_NAME := "pdp0"
+# RIL
+BOARD_PROVIDES_LIBRIL := true
+BOARD_MODEM_TYPE := xmm6262
 TARGET_SPECIFIC_HEADER_PATH += device/samsung/smdk4412-common/include
+BOARD_RIL_CLASS := ../../../device/samsung/i9300/ril
 
 # Wifi
 BOARD_WLAN_DEVICE                := bcmdhd
@@ -149,11 +157,12 @@ BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_bcmdhd
 BOARD_HOSTAPD_DRIVER             := NL80211
 BOARD_HOSTAPD_PRIVATE_LIB        := lib_driver_cmd_bcmdhd
 WIFI_DRIVER_FW_PATH_PARAM        := "/sys/module/dhd/parameters/firmware_path"
-WIFI_DRIVER_FW_PATH_STA          := "/system/etc/wifi/bcmdhd_sta.bin"
-WIFI_DRIVER_FW_PATH_AP           := "/system/etc/wifi/bcmdhd_apsta.bin"
-WIFI_DRIVER_FW_PATH_P2P          := "/system/etc/wifi/bcmdhd_p2p.bin"
+WIFI_DRIVER_FW_PATH_STA          := "/system/vendor/etc/wifi/bcmdhd_sta.bin"
+WIFI_DRIVER_FW_PATH_AP           := "/system/vendor/etc/wifi/bcmdhd_apsta.bin"
+WIFI_DRIVER_FW_PATH_P2P          := "/system/vendor/etc/wifi/bcmdhd_p2p.bin"
 WIFI_BAND                        := 802_11_ABG
 BOARD_HAVE_SAMSUNG_WIFI          := true
+WIFI_HIDL_UNIFIED_SUPPLICANT_SERVICE_RC_ENTRY := true
 
 # Network Routing
 TARGET_NEEDS_NETD_DIRECT_CONNECT_RULE := true
@@ -184,10 +193,10 @@ endif
 
 # SELinux
 BOARD_SEPOLICY_DIRS += device/samsung/smdk4412-common/selinux
+BOARD_PLAT_PRIVATE_SEPOLICY_DIR += device/samsung/smdk4412-common/selinux/private
 
 # Charging mode
 BOARD_BATTERY_DEVICE_NAME := "battery"
-BOARD_CHARGER_ENABLE_SUSPEND := true
 WITH_LINEAGE_CHARGER := false
 RED_LED_PATH := /sys/class/leds/led_r/brightness
 GREEN_LED_PATH := /sys/class/leds/led_g/brightness
@@ -199,15 +208,9 @@ SELINUX_IGNORE_NEVERALLOWS := true
 # LPM Battery Percentage
 BOARD_CHARGER_SHOW_PERCENTAGE := true
 
+# Memfd
+TARGET_HAS_MEMFD_BACKPORT := true
+
 # inherit from the proprietary version
 -include vendor/samsung/smdk4412-common/BoardConfigVendor.mk
-
-DEXPREOPT_GENERATE_APEX_IMAGE := false
-DEXPREOPT_USE_APEX_IMAGE := false
-
-# Manifests
-DEVICE_MANIFEST_FILE := device/samsung/smdk4412-common/manifest.xml
-
-
-
 

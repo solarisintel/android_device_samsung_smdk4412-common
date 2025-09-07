@@ -75,4 +75,3 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # madvise random in ART to reduce page cache thrashing.
 PRODUCT_PROPERTY_OVERRIDES += \
      dalvik.vm.madvise-random=true
-
