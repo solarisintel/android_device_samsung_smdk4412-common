@@ -1,5 +1,12 @@
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    ro.secure=0 \
-    ro.adb.secure=0 \
+
+# Vendor security patch level
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.lineage.build.vendor_security_patch=2017-08-01
+
+# Debug
+PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
     ro.debuggable=1 \
-    persist.service.adb.enable=1
+    persist.service.adb.enable=1 \
+    persist.sys.usb.config=adb \
+    service.adb.root=1
+
