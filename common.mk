@@ -317,8 +317,8 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 # Use GO
 $(call inherit-product, $(SRC_TARGET_DIR)/product/go_defaults.mk)
 
-# Apply Dalvik config for 1G phone, cannot set 2G Phone for out of memory
-# $(call inherit-product, frameworks/native/build/phone-xhdpi-1024-dalvik-heap.mk)
+# Apply Dalvik config, cannot set 2G Phone for out of memory
+# $(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
 
 PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.heapstartsize=8m \
@@ -330,3 +330,13 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Include debug 
 $(call inherit-product, device/samsung/smdk4412-common/system_prop_debug.mk)
+
+# Set lowram options, see system/memory/lmkd/lmkd.cpp
+PRODUCT_PROPERTY_OVERRIDES += \
+     ro.config.low_ram=true \
+     ro.lmk.upgrade_pressure=40 \
+     ro.lmk.downgrade_pressure=60 \
+     ro.lmk.kill_heaviest_task=false \
+     ro.lmk.medium=700
+
+
