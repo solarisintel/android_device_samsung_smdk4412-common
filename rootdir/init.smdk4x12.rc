@@ -4,6 +4,7 @@ import /init.target.rc
 import /init.smdk4x12.usb.rc
 
 on init
+    setprop ro.kernel.ebpf.supported false
 
 on fs
     mkdir /dev/usb-ffs 0770 shell shell
@@ -586,3 +587,5 @@ service persistentLogging /system/bin/logcat -b all -r 1024 -n 9 -v threadTime -
 
 on property:persist.logcat.enabled=1
 	start persistentLogging
+
+

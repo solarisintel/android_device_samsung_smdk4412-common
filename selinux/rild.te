@@ -25,3 +25,10 @@ allow rild system_file:file execute_no_trans;
 allow rild gps_device:chr_file rw_file_perms;
 allow rild anr_data_file:dir search;
 allow rild anr_data_file:file { open read };
+allow rild default_prop:file { getattr open read };
+allow rild radio_core_data_file:dir { add_name getattr remove_name search setattr write };
+allow rild radio_core_data_file:file { create getattr open read setattr unlink write };
+allow rild system_prop:file { getattr open read };
+# for sc03e
+allow rild socket_device:dir { add_name getattr remove_name search setattr write };
+allow rild socket_device:sock_file { create getattr open read setattr unlink write };

@@ -19,6 +19,9 @@ DEVICE_PATH := device/samsung/smdk4412-common
 # Allow duplicate rules to override them
 BUILD_BROKEN_DUP_RULES := true
 
+# PRODUCT_COPY_FILES directives.
+BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
+
 # This variable is set first, so it can be overridden
 # by BoardConfigVendor.mk
 USE_CAMERA_STUB := false
@@ -51,14 +54,18 @@ TARGET_PROVIDES_INIT := true
 TARGET_PROVIDES_INIT_TARGET_RC := true
 
 # Manifest
-DEVICE_MANIFEST_FILE := $(DEVICE_PATH)/manifest.xml
 PRODUCT_ENFORCE_VINTF_MANIFEST_OVERRIDE := true
+DEVICE_MANIFEST_FILE := device/samsung/smdk4412-common/manifest.xml
+DEVICE_MATRIX_FILE := device/samsung/smdk4412-common/compatibility_matrix.xml
 
 # Kernel
 BOARD_KERNEL_CMDLINE := console=ttySAC2,115200
+BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
 BOARD_KERNEL_IMAGE_NAME := zImage
 BOARD_KERNEL_BASE := 0x40000000
 BOARD_KERNEL_PAGESIZE := 2048
+#KERNEL_TOOLCHAIN := prebuilts/gcc/$(HOST_OS)-x86/arm/arm-eabi-4.8/bin
+#TARGET_KERNEL_CROSS_COMPILE_PREFIX := arm-eabi-
 LZMA_RAMDISK_TARGETS := recovery
 
 TARGET_PROCESS_SDK_VERSION_OVERRIDE += \
@@ -146,7 +153,7 @@ BOARD_MOBILEDATA_INTERFACE_NAME := "pdp0"
 BOARD_PROVIDES_LIBRIL := true
 BOARD_MODEM_TYPE := xmm6262
 TARGET_SPECIFIC_HEADER_PATH += device/samsung/smdk4412-common/include
-BOARD_RIL_CLASS := ../../../device/samsung/i9300/ril
+BOARD_RIL_CLASS := ../../../device/samsung/sc03e/ril
 
 # Wifi
 BOARD_WLAN_DEVICE                := bcmdhd
@@ -163,9 +170,6 @@ WIFI_DRIVER_FW_PATH_P2P          := "/system/vendor/etc/wifi/bcmdhd_p2p.bin"
 WIFI_BAND                        := 802_11_ABG
 BOARD_HAVE_SAMSUNG_WIFI          := true
 WIFI_HIDL_UNIFIED_SUPPLICANT_SERVICE_RC_ENTRY := true
-
-# Network Routing
-TARGET_NEEDS_NETD_DIRECT_CONNECT_RULE := true
 
 # Bluetooth
 BOARD_HAVE_BLUETOOTH := true
@@ -193,7 +197,10 @@ endif
 
 # SELinux
 BOARD_SEPOLICY_DIRS += device/samsung/smdk4412-common/selinux
-BOARD_PLAT_PRIVATE_SEPOLICY_DIR += device/samsung/smdk4412-common/selinux/private
+#BOARD_PLAT_PRIVATE_SEPOLICY_DIR += device/lineage/sepolicy/common/private
+
+#BOARD_VENDOR_SEPOLICY_DIRS += device/lineage/sepolicy/common/vendor
+BOARD_VENDOR_SEPOLICY_DIRS += device/samsung/smdk4412-common/sepolicy/vendor
 
 # Charging mode
 BOARD_BATTERY_DEVICE_NAME := "battery"
@@ -214,3 +221,5 @@ TARGET_HAS_MEMFD_BACKPORT := true
 # inherit from the proprietary version
 -include vendor/samsung/smdk4412-common/BoardConfigVendor.mk
 
+# system/netd, Network Routing modified by html6405
+TARGET_NEEDS_NETD_DIRECT_CONNECT_RULE := true

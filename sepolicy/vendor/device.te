@@ -1,0 +1,13 @@
+type alarm_device, dev_type, mlstrustedobject;
+type bluetooth_device, dev_type;
+#type efs_block_device, dev_type;
+
+type mdm_device, dev_type;
+type diag_device, dev_type;
+type qdsp_device, dev_type;
+type smd_device, dev_type;
+type hsic_device, dev_type;
+type mhi_device, dev_type;
+type smem_log_device, dev_type;
+type wlan_device, dev_type;
+

@@ -31,9 +31,11 @@ DONT_UNCOMPRESS_PRIV_APPS_DEXS := true
 PRODUCT_COPY_FILES := \
     $(COMMON_PATH)/rootdir/init.smdk4x12.rc:root/init.smdk4x12.rc \
     $(COMMON_PATH)/rootdir/init.smdk4x12.usb.rc:root/init.smdk4x12.usb.rc \
-    $(COMMON_PATH)/rootdir/init.trace.rc:root/init.trace.rc \
-    $(COMMON_PATH)/rootdir/ueventd.smdk4x12.rc:root/ueventd.smdk4x12.rc \
-    $(COMMON_PATH)/rootdir/ueventd.smdk4x12.rc:recovery/root/ueventd.smdk4x12.rc
+    $(COMMON_PATH)/rootdir/init.trace.rc:root/init.trace.rc
+
+# Permissions uevents
+PRODUCT_PACKAGES += \
+    ueventd.smdk4x12.rc
 
 # init.d
 PRODUCT_COPY_FILES += \
@@ -74,6 +76,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
     wifi.supplicant_scan_interval=30 \
     net.tethering.noprovisioning=true
 
+
+
 # RIL subscription workaround
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/restart_rild.sh:system/vendor/bin/restart_rild.sh \
@@ -83,7 +87,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(COMMON_PATH)/configs/google.xml:$(TARGET_COPY_OUT_VENDOR)/etc/sysconfig/google.xml
 
-## Gps
+# Gps (i9300)
 #PRODUCT_COPY_FILES += \
 #    $(COMMON_PATH)/configs/gps.conf:system/etc/gps.conf \
 #    $(COMMON_PATH)/configs/gps_debug.conf:$(TARGET_COPY_OUT_SYSTEM)/etc/gps_debug.conf
@@ -109,9 +113,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.gatekeeper@1.0-service.software
 
-# SamsungPowerHAL
+# Power HAL
 PRODUCT_PACKAGES += \
-    android.hardware.power@1.0-service.exynos4412
+    android.hardware.power@1.0-impl \
+    android.hardware.power@1.0-service
 
 # Battery
 PRODUCT_PACKAGES += \
@@ -127,15 +132,13 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Packages
 PRODUCT_PACKAGES += \
-    AdvancedDisplay \
     android.hardware.light@2.0-service.samsung \
     vendor.lineage.livedisplay@2.0-service.samsung-exynos \
     android.hardware.graphics.allocator@2.0-impl-exynos4 \
     android.hardware.graphics.mapper@2.0-impl-exynos4 \
     android.hardware.graphics.composer@2.1-impl \
-    android.hardware.graphics.composer@2.1-service \
-    android.hardware.audio@6.0-impl \
-    android.hardware.audio.effect@6.0-impl \
+    android.hardware.audio@7.0-impl \
+    android.hardware.audio.effect@7.0-impl \
     android.hardware.audio.effect@2.0-service \
     android.hardware.audio.service \
     audio.a2dp.default \
@@ -178,6 +181,10 @@ PRODUCT_PACKAGES += \
     libsecmfcdecapi \
     libsecmfcencapi
 
+# Light
+PRODUCT_PACKAGES += \
+    android.hardware.light-service.samsung
+
 # OMX
 PRODUCT_PACKAGES += \
     libstagefrighthw \
@@ -211,6 +218,10 @@ PRODUCT_COPY_FILES += \
 
 # Memory Optimizations
 PRODUCT_PROPERTY_OVERRIDES += \
+    ro.lmk.use_psi=false \
+    ro.lmk.critical=0 \
+    ro.lmk.low=950 \
+    ro.lmk.swap_free_low_percentage=15 \
     ro.vendor.qti.am.reschedule_service=true \
     ro.vendor.qti.sys.fw.use_trim_settings=true \
     ro.vendor.qti.sys.fw.trim_empty_percent=50 \
@@ -226,6 +237,18 @@ PRODUCT_PACKAGES += \
     make_ext4fs \
     setup_fs
 
+# NTFS Filesystem
+PRODUCT_PACKAGES += \
+    fsck.ntfs \
+    mkfs.ntfs \
+    mount.ntfs
+
+# ExFAT Filesystem
+PRODUCT_PACKAGES += \
+    fsck.exfat \
+    mkfs.exfat \
+    mount.exfat
+
 # Live Wallpapers
 PRODUCT_PACKAGES += \
     Galaxy4 \
@@ -238,8 +261,7 @@ PRODUCT_PACKAGES += \
     VisualizationWallpapers \
     librs_jni
 
-
-# Wifi
+## Wifi
 PRODUCT_PACKAGES += \
     android.hardware.wifi@1.0-service-lazy.legacy \
     android.hardware.wifi.supplicant@1.0 \
@@ -298,6 +320,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Include exynos4 platform specific parts
 TARGET_HAL_PATH := hardware/samsung/exynos4/hal
 TARGET_OMX_PATH := hardware/samsung/exynos/multimedia/openmax
+
 $(call inherit-product, hardware/samsung/exynos4x12.mk)
 
 # Shipping API level
@@ -309,7 +332,8 @@ $(call inherit-product, vendor/samsung/smdk4412-common/smdk4412-common-vendor.mk
 # Include Lineage sepolicy for Exynos
 $(call inherit-product, device/lineage/sepolicy/exynos/sepolicy.mk)
 
-# Art , for appear out of memory
+
+# Art
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     dalvik.vm.dex2oat-threads=1 \
     dalvik.vm.image-dex2oat-threads=1
@@ -317,26 +341,20 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 # Use GO
 $(call inherit-product, $(SRC_TARGET_DIR)/product/go_defaults.mk)
 
-# Apply Dalvik config, cannot set 2G Phone for out of memory
-# $(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
+# Apply Dalvik config for 2G phone, cannot settings
+#$(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
 
-PRODUCT_PROPERTY_OVERRIDES += \
-    dalvik.vm.heapstartsize=8m \
-    dalvik.vm.heapgrowthlimit=192m \
-    dalvik.vm.heapsize=384m \
-    dalvik.vm.heaptargetutilization=0.75 \
-    dalvik.vm.heapminfree=512k \
-    dalvik.vm.heapmaxfree=8m
+PRODUCT_VENDOR_PROPERTIES += \
+    dalvik.vm.heapstartsize?=8m \
+    dalvik.vm.heapgrowthlimit?=192m \
+    dalvik.vm.heapsize?=384m \
+    dalvik.vm.heaptargetutilization?=0.75 \
+    dalvik.vm.heapminfree?=512k \
+    dalvik.vm.heapmaxfree?=8m
 
-# Include debug 
+# Include debugging props
 $(call inherit-product, device/samsung/smdk4412-common/system_prop_debug.mk)
 
-# Set lowram options, see system/memory/lmkd/lmkd.cpp
+# BPF (not used system/netd)
 PRODUCT_PROPERTY_OVERRIDES += \
-     ro.config.low_ram=true \
-     ro.lmk.upgrade_pressure=40 \
-     ro.lmk.downgrade_pressure=60 \
-     ro.lmk.kill_heaviest_task=false \
-     ro.lmk.medium=700
-
-
+    ro.kernel.ebpf.supported=false

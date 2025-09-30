@@ -1,0 +1,43 @@
+/data/data/com.android.providers.telephony/databases(/.*)?       u:object_r:radio_data_file:s0
+/data/data/com.android.providers.telephony/shared_prefs(/.*)?    u:object_r:radio_data_file:s0
+/data/system/yas.cfg.tmp                                         u:object_r:sensors_data_file:s0
+/data/system/yas.cfg                                             u:object_r:sensors_data_file:s0
+
+/dev/alarm                                          u:object_r:alarm_device:s0
+/dev/block/platform/msm_sdcc\.1/by-name/efs         u:object_r:efs_block_device:s0
+/dev/block/platform/msm_sdcc\.1/by-name/userdata    u:object_r:userdata_block_device:s0
+/dev/btlock                                         u:object_r:bluetooth_device:s0
+/dev/gemini0                                        u:object_r:camera_device:s0
+/dev/socket/wifihal(/.*)?                           u:object_r:wifihal_socket:s0
+
+/firmware               u:object_r:firmware_file:s0
+
+/efs/FactoryApp(/.*)?   u:object_r:app_efs_file:s0
+/efs/bluetooth(/.*)?    u:object_r:bluetooth_efs_file:s0
+/efs/carrier(/.*)?      u:object_r:carrier_efs_file:s0
+/efs/drm(/.*)?          u:object_r:drm_efs_file:s0
+/efs/gyro_cal_data      u:object_r:sensor_efs_file:s0
+/efs/hw_offset          u:object_r:sensor_efs_file:s0
+/efs/imei(/.*)?         u:object_r:imei_efs_file:s0
+/efs/wifi(/.*)?         u:object_r:wifi_efs_file:s0
+
+/sys/class/mhl(/.*)?                                                                              u:object_r:sysfs_graphics:s0
+/sys/devices/platform/bcm[0-9]+_bluetooth/rfkill/rfkill0(/.*)?                                    u:object_r:sysfs_bluetooth_writable:s0
+/sys/devices/platform/kgsl-3d0.0/kgsl/kgsl-3d0/gpuclk                                             u:object_r:sysfs_thermal:s0
+/sys/devices/platform/kgsl-3d0.0/kgsl/kgsl-3d0/max_gpuclk                                         u:object_r:sysfs_thermal:s0
+/sys/devices/platform/kgsl-3d0.0/kgsl/kgsl-3d0/reset_count                                        u:object_r:sysfs_thermal:s0
+/sys/devices/platform/mipi_samsung_full_hd.2305/lcd/panel/panel(/.*)?                             u:object_r:sysfs_graphics:s0
+/sys/devices/platform/msm_hsic_host/usb1/1-1/1-1:1.[0-9]/net/rmnet_usb[0-9](/.*)?                 u:object_r:sysfs_rmnet:s0
+/sys/devices/platform/sec-battery/power_supply(/.*)?                                              u:object_r:sysfs_batteryinfo:s0
+/sys/devices/virtual/graphics/fb0/csc_cfg                                                         u:object_r:sysfs_graphics:s0
+/sys/devices/virtual/mdnie/mdnie(/.*)?                                                            u:object_r:sysfs_mdnie:s0
+/sys/devices/virtual/sec/sec_ir/ir_send                                                           u:object_r:sysfs_ir:s0
+/sys/devices/virtual/sec/sec_touchkey/keypad_enable                                               u:object_r:sysfs_keypad:s0
+/sys/devices/virtual/sensors(/.*)?                                                                u:object_r:sysfs_sensors:s0
+
+/(vendor|system/vendor)/bin/efsks                                               u:object_r:mdm_helper_exec:s0
+/(vendor|system/vendor)/bin/macloader                                           u:object_r:macloader_exec:s0
+/(vendor|system/vendor)/bin/qcks                                                u:object_r:mdm_helper_exec:s0
+/(vendor|system/vendor)/bin/hw/android\.hardware\.light@2\.0-service\.samsung   u:object_r:hal_light_default_exec:s0
+
+

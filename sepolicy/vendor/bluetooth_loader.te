@@ -1,0 +1,9 @@
+type bluetooth_loader, domain;
+type bluetooth_loader_exec, exec_type, file_type;
+
+# Started by init
+init_daemon_domain(bluetooth_loader)
+
+userdebug_or_eng(`
+    diag_use(bluetooth_loader)
+')

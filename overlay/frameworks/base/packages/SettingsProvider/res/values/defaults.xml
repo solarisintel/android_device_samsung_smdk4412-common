@@ -22,4 +22,9 @@
 
     <!-- Screen timeout default = 90 seconds -->
     <integer name="def_screen_off_timeout">90000</integer>
+    
+    <!-- Speed up the animations -->
+    <fraction name="def_window_animation_scale">50%</fraction>
+    <fraction name="def_window_transition_scale">50%</fraction>
+
 </resources>

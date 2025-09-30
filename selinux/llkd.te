@@ -1,0 +1,2 @@
+allow llkd init:process ptrace;
+
