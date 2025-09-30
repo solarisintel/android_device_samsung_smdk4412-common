@@ -347,7 +347,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/go_defaults.mk)
 PRODUCT_VENDOR_PROPERTIES += \
     dalvik.vm.heapstartsize?=8m \
     dalvik.vm.heapgrowthlimit?=192m \
-    dalvik.vm.heapsize?=384m \
+    dalvik.vm.heapsize?=428m \
     dalvik.vm.heaptargetutilization?=0.75 \
     dalvik.vm.heapminfree?=512k \
     dalvik.vm.heapmaxfree?=8m
@@ -356,5 +356,5 @@ PRODUCT_VENDOR_PROPERTIES += \
 $(call inherit-product, device/samsung/smdk4412-common/system_prop_debug.mk)
 
 # BPF (not used system/netd)
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.kernel.ebpf.supported=false
+#PRODUCT_PROPERTY_OVERRIDES += \
+#    ro.kernel.ebpf.supported=false
