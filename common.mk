@@ -317,13 +317,13 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 # Use GO
 $(call inherit-product, $(SRC_TARGET_DIR)/product/go_defaults.mk)
 
-# Apply Dalvik config, cannot set 2G Phone for out of memory
+# Apply Dalvik config, set 2G Phone memory settings
 # $(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
 
 PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.heapstartsize=8m \
     dalvik.vm.heapgrowthlimit=192m \
-    dalvik.vm.heapsize=428m \
+    dalvik.vm.heapsize=512m \
     dalvik.vm.heaptargetutilization=0.75 \
     dalvik.vm.heapminfree=512k \
     dalvik.vm.heapmaxfree=8m
