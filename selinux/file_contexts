@@ -22,6 +22,7 @@
 /dev/block/mmcblk0p10                                            u:object_r:userdata_block_device:s0
 /dev/block/mmcblk0p12                                            u:object_r:preload_block_device:s0
 #/dev/block/zram0                                                 u:object_r:swap_block_device:s0
+
 /efs                                                             u:object_r:efs_device_file:s0
 /misc                                                            u:object_r:misc_device_file:s0
 /tombstones                                                      u:object_r:tombstones_device_file:s0
@@ -127,4 +128,4 @@
 # for sc03e
 /(vendor|system/vendor)/bin/hw/android\.hardware\.gnss@[0-9]\.[0-9]-service\.legacy	u:object_r:hal_gnss_default_exec:s0
 
-#/firmware                                                       u:object_r:firmware_file:s0
+/firmware                                                       u:object_r:firmware_file:s0
